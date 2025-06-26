@@ -7,12 +7,17 @@ PixelPacific Licensing Server for PiBells.
 - Flask (`pip install flask`)
 
 ## Usage
-1. Edit `licenses.json` to include all valid license keys.
-2. Run the server:
+1. Clone the repository and enter the directory:
+   ```bash
+   git clone https://github.com/AlinariC/PixelPatrol.git
+   cd PixelPatrol
+   ```
+2. Edit `licenses.json` to include all valid license keys.
+3. Run the server:
    ```bash
    python3 server.py
    ```
-3. The server listens on port 5000. Clients can check a license by sending a GET request to `/check/<license_key>`.
+4. The server listens on port 5000. Clients can check a license by sending a GET request to `/check/<license_key>`.
 
 Example:
 ```bash
@@ -23,12 +28,12 @@ The server responds with JSON indicating whether the license is valid.
 
 ## Install as a system service
 
-Run the provided `install_service.sh` script as root to deploy PixelPatrol as a
+Run the `install_service.sh` script as root to deploy PixelPatrol as a
 systemd service. The script clones the repository to `/opt/pixelpatrol`,
 installs Flask and registers a service called `pixelpatrol.service`.
 
 ```bash
-sudo ./install_service.sh
+curl -fsSL https://raw.githubusercontent.com/AlinariC/PixelPatrol/main/install_service.sh | sudo bash
 ```
 
 After installation, control the service with `systemctl`:
