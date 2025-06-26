@@ -1,1 +1,14 @@
-["ABC123", "DEF456"]
+[
+  {
+    "key": "ABC123",
+    "name": "Example User",
+    "email": "user@example.com",
+    "expires": "2099-12-31"
+  },
+  {
+    "key": "DEF456",
+    "name": "Second User",
+    "email": "second@example.com",
+    "expires": "2099-12-31"
+  }
+]

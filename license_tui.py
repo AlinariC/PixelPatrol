@@ -7,17 +7,38 @@ from pathlib import Path
 LICENSE_FILE = Path(__file__).parent / 'licenses.json'
 
 
+def prompt(stdscr, y, text):
+    curses.echo()
+    stdscr.addstr(y, 2, text)
+    stdscr.clrtoeol()
+    value = stdscr.getstr(y, 2 + len(text), 60).decode().strip()
+    curses.noecho()
+    return value
+
+
 def load_licenses():
     try:
         with open(LICENSE_FILE, 'r') as f:
-            return sorted(set(json.load(f)))
+            data = json.load(f)
+            # Support old format: list of strings
+            if data and isinstance(data[0], str):
+                return [
+                    {
+                        'key': k,
+                        'name': '',
+                        'email': '',
+                        'expires': ''
+                    }
+                    for k in sorted(set(data))
+                ]
+            return data
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
 
 def save_licenses(licenses):
     with open(LICENSE_FILE, 'w') as f:
-        json.dump(sorted(licenses), f)
+        json.dump(sorted(licenses, key=lambda x: x['key']), f, indent=2)
 
 
 def draw_menu(stdscr, licenses, idx):
@@ -27,7 +48,8 @@ def draw_menu(stdscr, licenses, idx):
     stdscr.addstr(0, 0, title[:width - 1])
     for i, lic in enumerate(licenses):
         attr = curses.A_REVERSE if i == idx else curses.A_NORMAL
-        stdscr.addstr(i + 2, 2, lic[:width - 4], attr)
+        display = f"{lic['key']} - {lic['name']} ({lic['expires']})"
+        stdscr.addstr(i + 2, 2, display[:width - 4], attr)
     stdscr.refresh()
 
 
@@ -54,14 +76,25 @@ def main(stdscr):
         elif ch in (ord('a'), ord('A')):
             # Auto-generate a unique 24-character alphanumeric license
             alphabet = string.ascii_uppercase + string.digits
+            existing = {l['key'] for l in licenses}
             while True:
-                new = ''.join(random.choices(alphabet, k=24))
-                if new not in licenses:
+                new_key = ''.join(random.choices(alphabet, k=24))
+                if new_key not in existing:
                     break
-            licenses.append(new)
-            licenses.sort()
-            idx = licenses.index(new)
-            stdscr.addstr(len(licenses) + 4, 2, f"Added license: {new}")
+            y = len(licenses) + 4
+            name = prompt(stdscr, y, 'Customer name: ')
+            email = prompt(stdscr, y + 1, 'Customer email: ')
+            expires = prompt(stdscr, y + 2, 'Expiration (YYYY-MM-DD): ')
+            new_entry = {
+                'key': new_key,
+                'name': name,
+                'email': email,
+                'expires': expires,
+            }
+            licenses.append(new_entry)
+            licenses.sort(key=lambda x: x['key'])
+            idx = licenses.index(new_entry)
+            stdscr.addstr(y + 4, 2, f"Added license: {new_key}")
             stdscr.refresh()
             curses.napms(1000)
         elif ch in (ord('d'), ord('D')) and licenses:

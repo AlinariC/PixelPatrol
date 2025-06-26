@@ -12,9 +12,10 @@ PixelPacific Licensing Server for PiBells.
    git clone https://github.com/AlinariC/PixelPatrol.git
    cd PixelPatrol
    ```
-2. Edit `licenses.json` or use the TUI to add new license keys. Keys are
-   automatically generated as 24-character alphanumeric strings when added
-   through the TUI.
+2. Edit `licenses.json` or use the TUI to add new license keys. Each key
+   now stores the customer name, email and expiration date in addition to the
+   license string. Keys are automatically generated as 24-character
+   alphanumeric strings when added through the TUI.
 3. Run the server:
    ```bash
    python3 server.py
@@ -26,7 +27,8 @@ Example:
 curl http://localhost:5000/check/ABC123
 ```
 
-The server responds with JSON indicating whether the license is valid.
+The server responds with JSON indicating whether the license is valid or
+expired and includes the stored customer information.
 
 ## Managing Licenses
 
@@ -37,7 +39,8 @@ does not provide endpoints for modifying licenses.
 ### Text interface
 
 The TUI presents a simple curses-based UI for viewing, adding and removing
-license keys.
+license keys. When adding a key you will be prompted for the customer name,
+email and expiration date.
 
 ```bash
 python3 license_tui.py
