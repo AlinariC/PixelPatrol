@@ -20,15 +20,16 @@ PixelPacific Licensing Server for PiBells.
    ```bash
    python3 server.py
    ```
-4. The server listens on port 5000. Clients can check a license by sending a GET request to `/check/<license_key>`.
+4. The server listens on port 5000. Clients can check a license by sending a GET request to `/check/<license_key>?email=<registered_email>`.
 
 Example:
 ```bash
-curl http://localhost:5000/check/ABC123
+curl "http://localhost:5000/check/ABC123?email=user@example.com"
 ```
 
-The server responds with JSON indicating whether the license is valid or
-expired and includes the stored customer information.
+The server responds with JSON indicating whether the license is valid and
+provides the expiration date. Only the status (`VALID` or `INVALID`) and the
+expiration date are returned to the client.
 
 ## Managing Licenses
 

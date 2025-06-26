@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, date
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -23,10 +23,11 @@ except FileNotFoundError:
 
 @app.route('/check/<license_key>')
 def check_license(license_key):
-    """Check if the provided license key is valid."""
+    """Validate a license key using the provided email."""
     info = LICENSES.get(license_key)
-    if not info:
-        return jsonify({'license': license_key, 'status': 'invalid'})
+    email = request.args.get('email', '').strip().lower()
+    if not info or info.get('email', '').lower() != email:
+        return jsonify({'status': 'INVALID'})
 
     expired = False
     exp = info.get('expires')
@@ -37,12 +38,9 @@ def check_license(license_key):
         except ValueError:
             pass
 
-    status = 'valid' if not expired else 'expired'
+    status = 'VALID' if not expired else 'INVALID'
     payload = {
-        'license': license_key,
         'status': status,
-        'name': info.get('name'),
-        'email': info.get('email'),
         'expires': exp,
     }
     return jsonify(payload)
