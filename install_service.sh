@@ -24,6 +24,7 @@ fi
 PRESERVE=0
 if [ -f "$INSTALL_DIR/$LICENSE_FILE" ]; then
     cp "$INSTALL_DIR/$LICENSE_FILE" "/tmp/$LICENSE_FILE.bak"
+    git -C "$INSTALL_DIR" checkout -- "$LICENSE_FILE"
     PRESERVE=1
 fi
 
