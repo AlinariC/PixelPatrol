@@ -42,7 +42,9 @@ does not provide endpoints for modifying licenses.
 The text interface provides a curses-based UI for viewing, adding and
 removing license keys. The layout now uses a framed list with a help bar at
 the bottom showing the available actions. When adding a key you will be
-prompted for the customer name, email and expiration date.
+prompted for the customer name, email and expiration date. The list displays
+each license key along with the associated name, email address and
+expiration date.
 
 ```bash
 python3 license_tui.py

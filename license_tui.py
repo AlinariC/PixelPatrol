@@ -54,13 +54,23 @@ def draw_menu(stdscr, licenses, idx):
     stdscr.attroff(curses.A_BOLD)
 
     # Column headers
-    header = "KEY".ljust(25) + "NAME".ljust(22) + "EXPIRES"
+    header = (
+        "KEY".ljust(25)
+        + "NAME".ljust(18)
+        + "EMAIL".ljust(23)
+        + "EXPIRES"
+    )
     stdscr.addstr(2, 2, header[:width - 4], curses.A_UNDERLINE)
 
     # License entries
     for i, lic in enumerate(licenses):
         attr = curses.A_REVERSE if i == idx else curses.A_NORMAL
-        row = f"{lic['key']:<24} {lic['name']:<20} {lic['expires']}"
+        row = (
+            f"{lic['key']:<24} "
+            f"{lic['name']:<17} "
+            f"{lic['email']:<22} "
+            f"{lic['expires']}"
+        )
         stdscr.addstr(3 + i, 2, row[:width - 4], attr)
 
     help_line = "[A] Add  [D] Delete  [Q] Quit  Up/Down Navigate"
