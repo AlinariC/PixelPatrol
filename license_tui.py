@@ -8,10 +8,13 @@ LICENSE_FILE = Path(__file__).parent / 'licenses.json'
 
 
 def prompt(stdscr, y, text):
+    """Prompt for user input using the full width of the window."""
     curses.echo()
+    height, width = stdscr.getmaxyx()
     stdscr.addstr(y, 2, text)
     stdscr.clrtoeol()
-    value = stdscr.getstr(y, 2 + len(text), 60).decode().strip()
+    max_len = max(10, width - len(text) - 4)
+    value = stdscr.getstr(y, 2 + len(text), max_len).decode().strip()
     curses.noecho()
     return value
 
@@ -54,24 +57,40 @@ def draw_menu(stdscr, licenses, idx):
     stdscr.attroff(curses.A_BOLD)
 
     # Column headers
+    # Determine column widths. For wide terminals (>=110 columns) we
+    # expand the default sizes to better utilise the available space.
+    table_width = width - 4  # account for border
+    if width >= 110:
+        col_key = 30
+        col_name = 28
+        col_email = 40
+        col_expires = table_width - col_key - col_name - col_email - 3
+        if col_expires < 10:
+            col_expires = 10
+    else:
+        col_key = 25
+        col_name = 18
+        col_email = 23
+        col_expires = max(7, table_width - col_key - col_name - col_email - 3)
+
     header = (
-        "KEY".ljust(25)
-        + "NAME".ljust(18)
-        + "EMAIL".ljust(23)
-        + "EXPIRES"
+        "KEY".ljust(col_key) +
+        "NAME".ljust(col_name) +
+        "EMAIL".ljust(col_email) +
+        "EXPIRES".ljust(col_expires)
     )
-    stdscr.addstr(2, 2, header[:width - 4], curses.A_UNDERLINE)
+    stdscr.addstr(2, 2, header[:table_width], curses.A_UNDERLINE)
 
     # License entries
     for i, lic in enumerate(licenses):
         attr = curses.A_REVERSE if i == idx else curses.A_NORMAL
         row = (
-            f"{lic['key']:<24} "
-            f"{lic['name']:<17} "
-            f"{lic['email']:<22} "
-            f"{lic['expires']}"
+            f"{lic['key']:<{col_key - 1}} "
+            f"{lic['name']:<{col_name - 1}} "
+            f"{lic['email']:<{col_email - 1}} "
+            f"{lic['expires']:<{col_expires}}"
         )
-        stdscr.addstr(3 + i, 2, row[:width - 4], attr)
+        stdscr.addstr(3 + i, 2, row[:table_width], attr)
 
     help_line = "[A] Add  [D] Delete  [Q] Quit  Up/Down Navigate"
     stdscr.addstr(height - 2, 2, help_line[:width - 4])
