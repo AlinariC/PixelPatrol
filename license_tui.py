@@ -1,5 +1,7 @@
 import curses
 import json
+import random
+import string
 from pathlib import Path
 
 LICENSE_FILE = Path(__file__).parent / 'licenses.json'
@@ -50,15 +52,18 @@ def main(stdscr):
             if licenses:
                 idx = min(len(licenses) - 1, idx + 1)
         elif ch in (ord('a'), ord('A')):
-            curses.echo()
-            stdscr.addstr(len(licenses) + 4, 2, "Enter new license: ")
-            stdscr.clrtoeol()
-            new = stdscr.getstr().decode().strip()
-            curses.noecho()
-            if new and new not in licenses:
-                licenses.append(new)
-                licenses.sort()
-                idx = licenses.index(new)
+            # Auto-generate a unique 24-character alphanumeric license
+            alphabet = string.ascii_uppercase + string.digits
+            while True:
+                new = ''.join(random.choices(alphabet, k=24))
+                if new not in licenses:
+                    break
+            licenses.append(new)
+            licenses.sort()
+            idx = licenses.index(new)
+            stdscr.addstr(len(licenses) + 4, 2, f"Added license: {new}")
+            stdscr.refresh()
+            curses.napms(1000)
         elif ch in (ord('d'), ord('D')) and licenses:
             licenses.pop(idx)
             idx = min(idx, len(licenses) - 1)
