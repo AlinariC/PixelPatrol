@@ -54,6 +54,10 @@ Use the arrow keys to navigate the list. The help bar shows the shortcuts:
 `[A]` Add, `[D]` Delete and `[Q]` Quit. Changes are saved to
 `licenses.json`.
 
+The interface adapts to your terminal size and displays additional spacing
+when run in a wider window (for example 120x35). If your terminal is
+narrower, the columns shrink automatically.
+
 ## Install as a system service
 
 Run the `install_service.sh` script as root to deploy PixelPatrol as a
