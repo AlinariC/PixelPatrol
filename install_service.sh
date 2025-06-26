@@ -4,7 +4,7 @@ set -e
 # This script installs PixelPatrol as a systemd service.
 # It clones the repository, installs dependencies and starts the service.
 
-REPO_URL=${REPO_URL:-"https://github.com/example/PixelPatrol.git"}
+REPO_URL=${REPO_URL:-"https://github.com/AlinariC/PixelPatrol.git"}
 INSTALL_DIR=${INSTALL_DIR:-"/opt/pixelpatrol"}
 SERVICE_FILE="/etc/systemd/system/pixelpatrol.service"
 
