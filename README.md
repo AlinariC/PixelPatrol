@@ -12,7 +12,9 @@ PixelPacific Licensing Server for PiBells.
    git clone https://github.com/AlinariC/PixelPatrol.git
    cd PixelPatrol
    ```
-2. Edit `licenses.json` to include all valid license keys.
+2. Edit `licenses.json` or use the TUI to add new license keys. Keys are
+   automatically generated as 24-character alphanumeric strings when added
+   through the TUI.
 3. Run the server:
    ```bash
    python3 server.py
@@ -41,8 +43,9 @@ license keys.
 python3 license_tui.py
 ```
 
-Use the arrow keys to navigate, press `a` to add a new license, `d` to delete
-the selected key and `q` to quit. Changes are saved to `licenses.json`.
+Use the arrow keys to navigate, press `a` to generate and add a new license,
+`d` to delete the selected key and `q` to quit. Changes are saved to
+`licenses.json`.
 
 ## Install as a system service
 
