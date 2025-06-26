@@ -28,26 +28,14 @@ The server responds with JSON indicating whether the license is valid.
 
 ## Managing Licenses
 
-PixelPatrol exposes additional endpoints for viewing, adding and deleting
-licenses. All responses are JSON.
-
-- `GET /licenses` - return the current list of licenses.
-- `POST /licenses` - add a license key. The request body should be JSON with a
-  `license` field.
-- `DELETE /licenses/<license>` - remove the specified license key.
-
-Example adding a license:
-
-```bash
-curl -X POST -H "Content-Type: application/json" \
-  -d '{"license": "NEWKEY"}' http://localhost:5000/licenses
-```
+License keys are edited locally using the included text based interface.
+Run the `license_tui.py` script to view, add or remove keys. The web server
+does not provide endpoints for modifying licenses.
 
 ### Text interface
 
-For local administration without exposing the HTTP endpoints, run the
-`license_tui.py` script. It presents a simple curses-based UI for viewing,
-adding and removing license keys.
+The TUI presents a simple curses-based UI for viewing, adding and removing
+license keys.
 
 ```bash
 python3 license_tui.py
