@@ -42,14 +42,30 @@ def save_licenses(licenses):
 
 
 def draw_menu(stdscr, licenses, idx):
+    """Render the license list with a simple framed layout."""
     stdscr.clear()
     height, width = stdscr.getmaxyx()
-    title = "License Manager - Up/Down navigate, 'a' add, 'd' delete, 'q' quit"
-    stdscr.addstr(0, 0, title[:width - 1])
+
+    # Border and title
+    stdscr.border()
+    title = "License Manager"
+    stdscr.attron(curses.A_BOLD)
+    stdscr.addstr(0, max(2, (width - len(title)) // 2), title)
+    stdscr.attroff(curses.A_BOLD)
+
+    # Column headers
+    header = "KEY".ljust(25) + "NAME".ljust(22) + "EXPIRES"
+    stdscr.addstr(2, 2, header[:width - 4], curses.A_UNDERLINE)
+
+    # License entries
     for i, lic in enumerate(licenses):
         attr = curses.A_REVERSE if i == idx else curses.A_NORMAL
-        display = f"{lic['key']} - {lic['name']} ({lic['expires']})"
-        stdscr.addstr(i + 2, 2, display[:width - 4], attr)
+        row = f"{lic['key']:<24} {lic['name']:<20} {lic['expires']}"
+        stdscr.addstr(3 + i, 2, row[:width - 4], attr)
+
+    help_line = "[A] Add  [D] Delete  [Q] Quit  Up/Down Navigate"
+    stdscr.addstr(height - 2, 2, help_line[:width - 4])
+
     stdscr.refresh()
 
 
@@ -81,10 +97,13 @@ def main(stdscr):
                 new_key = ''.join(random.choices(alphabet, k=24))
                 if new_key not in existing:
                     break
-            y = len(licenses) + 4
+
+            height, _ = stdscr.getmaxyx()
+            y = height - 6
             name = prompt(stdscr, y, 'Customer name: ')
             email = prompt(stdscr, y + 1, 'Customer email: ')
             expires = prompt(stdscr, y + 2, 'Expiration (YYYY-MM-DD): ')
+
             new_entry = {
                 'key': new_key,
                 'name': name,
@@ -98,8 +117,12 @@ def main(stdscr):
             stdscr.refresh()
             curses.napms(1000)
         elif ch in (ord('d'), ord('D')) and licenses:
-            licenses.pop(idx)
+            removed = licenses.pop(idx)
             idx = min(idx, len(licenses) - 1)
+            height, _ = stdscr.getmaxyx()
+            stdscr.addstr(height - 4, 2, f"Removed license: {removed['key']}")
+            stdscr.refresh()
+            curses.napms(1000)
 
     save_licenses(licenses)
 

@@ -39,16 +39,17 @@ does not provide endpoints for modifying licenses.
 
 ### Text interface
 
-The TUI presents a simple curses-based UI for viewing, adding and removing
-license keys. When adding a key you will be prompted for the customer name,
-email and expiration date.
+The text interface provides a curses-based UI for viewing, adding and
+removing license keys. The layout now uses a framed list with a help bar at
+the bottom showing the available actions. When adding a key you will be
+prompted for the customer name, email and expiration date.
 
 ```bash
 python3 license_tui.py
 ```
 
-Use the arrow keys to navigate, press `a` to generate and add a new license,
-`d` to delete the selected key and `q` to quit. Changes are saved to
+Use the arrow keys to navigate the list. The help bar shows the shortcuts:
+`[A]` Add, `[D]` Delete and `[Q]` Quit. Changes are saved to
 `licenses.json`.
 
 ## Install as a system service
