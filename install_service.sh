@@ -8,10 +8,23 @@ REPO_URL=${REPO_URL:-"https://github.com/AlinariC/PixelPatrol.git"}
 INSTALL_DIR=${INSTALL_DIR:-"/opt/pixelpatrol"}
 SERVICE_FILE="/etc/systemd/system/pixelpatrol.service"
 ALIAS_FILE="/etc/profile.d/pixelpatrol.sh"
+LICENSE_FILE="licenses.json"
+
+# Stop running service if it's already active
+if systemctl is-active --quiet pixelpatrol.service; then
+    systemctl stop pixelpatrol.service
+fi
 
 if [ "$EUID" -ne 0 ]; then
     echo "Please run as root" >&2
     exit 1
+fi
+
+# Preserve local licenses file during update
+PRESERVE=0
+if [ -f "$INSTALL_DIR/$LICENSE_FILE" ]; then
+    cp "$INSTALL_DIR/$LICENSE_FILE" "/tmp/$LICENSE_FILE.bak"
+    PRESERVE=1
 fi
 
 # Clone or update the repository
@@ -19,6 +32,10 @@ if [ ! -d "$INSTALL_DIR" ]; then
     git clone "$REPO_URL" "$INSTALL_DIR"
 else
     git -C "$INSTALL_DIR" pull
+fi
+
+if [ "$PRESERVE" -eq 1 ]; then
+    mv "/tmp/$LICENSE_FILE.bak" "$INSTALL_DIR/$LICENSE_FILE"
 fi
 
 # Install Python dependencies
