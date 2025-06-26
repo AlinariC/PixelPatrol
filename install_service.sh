@@ -34,7 +34,7 @@ ExecStart=/usr/bin/python3 $INSTALL_DIR/server.py
 WorkingDirectory=$INSTALL_DIR
 Restart=always
 User=nobody
-Group=nogroup
+Group=nobody
 
 [Install]
 WantedBy=multi-user.target
