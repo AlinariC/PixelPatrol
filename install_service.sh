@@ -7,6 +7,7 @@ set -e
 REPO_URL=${REPO_URL:-"https://github.com/AlinariC/PixelPatrol.git"}
 INSTALL_DIR=${INSTALL_DIR:-"/opt/pixelpatrol"}
 SERVICE_FILE="/etc/systemd/system/pixelpatrol.service"
+ALIAS_FILE="/etc/profile.d/pixelpatrol.sh"
 
 if [ "$EUID" -ne 0 ]; then
     echo "Please run as root" >&2
@@ -45,4 +46,7 @@ systemctl daemon-reload
 systemctl enable pixelpatrol.service
 systemctl restart pixelpatrol.service
 
-echo "PixelPatrol service installed and running." 
+# Add alias for the license management TUI
+echo "alias pixelpatrol=\"sudo python3 $INSTALL_DIR/license_tui.py\"" > "$ALIAS_FILE"
+
+echo "PixelPatrol service installed and running."
