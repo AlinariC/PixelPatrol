@@ -43,6 +43,19 @@ curl -X POST -H "Content-Type: application/json" \
   -d '{"license": "NEWKEY"}' http://localhost:5000/licenses
 ```
 
+### Text interface
+
+For local administration without exposing the HTTP endpoints, run the
+`license_tui.py` script. It presents a simple curses-based UI for viewing,
+adding and removing license keys.
+
+```bash
+python3 license_tui.py
+```
+
+Use the arrow keys to navigate, press `a` to add a new license, `d` to delete
+the selected key and `q` to quit. Changes are saved to `licenses.json`.
+
 ## Install as a system service
 
 Run the `install_service.sh` script as root to deploy PixelPatrol as a
