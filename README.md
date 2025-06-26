@@ -26,6 +26,23 @@ curl http://localhost:5000/check/ABC123
 
 The server responds with JSON indicating whether the license is valid.
 
+## Managing Licenses
+
+PixelPatrol exposes additional endpoints for viewing, adding and deleting
+licenses. All responses are JSON.
+
+- `GET /licenses` - return the current list of licenses.
+- `POST /licenses` - add a license key. The request body should be JSON with a
+  `license` field.
+- `DELETE /licenses/<license>` - remove the specified license key.
+
+Example adding a license:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"license": "NEWKEY"}' http://localhost:5000/licenses
+```
+
 ## Install as a system service
 
 Run the `install_service.sh` script as root to deploy PixelPatrol as a
