@@ -28,8 +28,8 @@ curl "http://localhost:5000/check/ABC123?email=user@example.com"
 ```
 
 The server responds with JSON indicating whether the license is valid and
-provides the expiration date. Only the status (`VALID` or `INVALID`) and the
-expiration date are returned to the client.
+provides the expiration date and customer name. The payload includes the
+`status` (`VALID` or `INVALID`), `expires` date and the registered `name`.
 
 ## Managing Licenses
 
