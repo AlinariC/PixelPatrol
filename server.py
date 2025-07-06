@@ -42,6 +42,7 @@ def check_license(license_key):
     payload = {
         'status': status,
         'expires': exp,
+        'name': info.get('name', ''),
     }
     return jsonify(payload)
 
